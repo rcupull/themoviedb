@@ -28,7 +28,8 @@ export const basicCardTitleStyle: CSS.Properties = {
 export const navBarLinkStyle: CSS.Properties = {
   padding: "5px",
   margin: "0 30px",
-  color: "rgb(140,140,140)"
+  color: "rgb(140,140,140)",
+  fontSize: "1.5rem"
 };
 
 export const navBarSearchButtonStyle: CSS.Properties = {
@@ -70,4 +71,9 @@ export const favoriteStylDisable: CSS.Properties = {
   cursor: "pointer",
   fontSize: "2rem",
   padding: "5px 0 0 50px"
+};
+/////////////////////////////Login Component////////////////////////////////////
+export const UserModeLabelStyle: CSS.Properties = {
+  fontSize: "2rem",
+  textAlign: "center"
 };

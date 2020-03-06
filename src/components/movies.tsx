@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../presentational/navbar";
-import { loadDefaultDBInLocalStorage } from "../service/movieDB";
-
-import { MovieSysContext } from "../components/movieSysContext";
-
+import { AuthContext, AuthParamsInterface } from "../components/authContext";
+import Login from "../presentational/login";
+import SessionDependentRoute from "./sessionDependentRoute";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-
+import {
+  BillboardMovieParams,
+  PopularMovieParams,
+  BoyMovieParams,
+  SearchMovieParams,
+  GetFavoriteMovieParams
+} from "../service/apiData";
 import StandardPage from "../presentational/standardPage";
-import FavoritePage from "../presentational/favoritePage";
 
-import { Container } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 
 export enum MovieTypes {
   billboard,
@@ -40,19 +44,6 @@ export interface Movie {
   isfavorite: boolean;
 }
 
-const imagesURL = "https://image.tmdb.org/t/p/w185_and_h278_bestv2";
-
-const searchURL =
-  "https://api.themoviedb.org/3/search/movie?api_key=45bf6592c14a965b33549f4cc7e6c664";
-
-const billboardURL =
-  "https://api.themoviedb.org/3/trending/movie/week?api_key=45bf6592c14a965b33549f4cc7e6c664";
-const popularURL =
-  "https://api.themoviedb.org/3/discover/movie?api_key=45bf6592c14a965b33549f4cc7e6c664&sort_by=popularity.asc&include_video=false";
-const boyURL =
-  "https://api.themoviedb.org/3/discover/movie?api_key=45bf6592c14a965b33549f4cc7e6c664&sort_by=popularity.asc&include_adult=false&with_genres=28";
-
-const favoriteURL = "http://localhost:8888/favorite-meta";
 const favoriteIndexURL = "http://localhost:8888/favorite-index";
 
 const useLocalStorageAsDB = true; //For use LocalStorage as DB
@@ -73,6 +64,11 @@ export interface MoviesState {
 export interface MoviesProps {}
 
 const Movies: React.SFC<MoviesProps> = () => {
+  const [authParams, setAuthParams] = useState<AuthParamsInterface>({
+    session_id: "",
+    request_token: ""
+  });
+
   const [currentPageBillboard, setCurrentPageBillboard] = useState<number>(1);
   const [currentPagePopular, setCurrentPagePopular] = useState<number>(1);
   const [currentPageBoy, setCurrentPageBoy] = useState<number>(1);
@@ -83,9 +79,25 @@ const Movies: React.SFC<MoviesProps> = () => {
 
   /////////////////////Working with localStorage as DB//////////////////
 
+  const handleSetSession = (params: AuthParamsInterface) => {
+    setAuthParams(params);
+  };
+
+  // useEffect(() => {
+  //   if (useLocalStorageAsDB) loadDefaultDBInLocalStorage();
+  // }, []);
+
   useEffect(() => {
-    if (useLocalStorageAsDB) loadDefaultDBInLocalStorage();
-  }, []);
+    console.log("authParams", authParams);
+  }, [authParams]);
+
+  // let a = AuthSession(
+  //   { params: authParams, setParams: setAuthParams },
+  //   "rcupull",
+  //   "123"
+  // );
+
+  // console.log("a", a);
 
   //////////////////////////////////////////////////////////////////////
 
@@ -94,85 +106,103 @@ const Movies: React.SFC<MoviesProps> = () => {
   }, [query]);
 
   return (
-    <MovieSysContext.Provider
-      value={{
-        favoriteIndexURL: favoriteIndexURL,
-        imagesURL: imagesURL,
-        useLocalStorageAsDB: useLocalStorageAsDB
-      }}
+    <AuthContext.Provider
+      value={{ params: authParams, setParams: handleSetSession }}
     >
-      <Container>
-        <BrowserRouter>
-          <NavBar handleSearchMovies={setQuery} />
+      <BrowserRouter>
+        <NavBar handleSearchMovies={setQuery} />
+        <Row>
+          <Col xs={2}>
+            <Container></Container>
+          </Col>
+          <Col>
+            <Container>
+              <Switch>
+                <Route path="/billboard">
+                  <StandardPage
+                    requestParams={BillboardMovieParams}
+                    pageTitle={"Billboard"}
+                    currentPage={currentPageBillboard}
+                    showFavoriteCmp={false}
+                    handleChangeCurrentPage={setCurrentPageBillboard}
+                  />
+                </Route>
+                <Route path="/popular">
+                  <StandardPage
+                    requestParams={PopularMovieParams}
+                    pageTitle={"Popular"}
+                    currentPage={currentPagePopular}
+                    showFavoriteCmp={false}
+                    handleChangeCurrentPage={setCurrentPagePopular}
+                  />
+                </Route>
+                <Route path="/boy">
+                  <StandardPage
+                    requestParams={BoyMovieParams}
+                    pageTitle={"Boy"}
+                    currentPage={currentPageBoy}
+                    showFavoriteCmp={false}
+                    handleChangeCurrentPage={setCurrentPageBoy}
+                  />
+                </Route>
+                <Route path="/search">
+                  <StandardPage
+                    requestParams={SearchMovieParams}
+                    pageTitle={"Search"}
+                    currentPage={currentPageSearch}
+                    showFavoriteCmp={false}
+                    handleChangeCurrentPage={setCurrentPageSearch}
+                    query={query}
+                  />
+                </Route>
+                <SessionDependentRoute path="/favorite">
+                  <StandardPage
+                    requestParams={GetFavoriteMovieParams}
+                    pageTitle={"Favorite"}
+                    currentPage={currentPageFavorite}
+                    showFavoriteCmp={true}
+                    handleChangeCurrentPage={setCurrentPageFavorite}
+                  />
+                </SessionDependentRoute>
 
-          <Switch>
-            <Route path="/billboard">
-              <StandardPage
-                pageTitle={"Billboard"}
-                api_URL={billboardURL}
-                currentPage={currentPageBillboard}
-                showFavoriteCmp={false}
-                handleChangeCurrentPage={setCurrentPageBillboard}
-              />
-            </Route>
-            <Route path="/popular">
-              <StandardPage
-                pageTitle={"Popular"}
-                api_URL={popularURL}
-                currentPage={currentPagePopular}
-                showFavoriteCmp={false}
-                handleChangeCurrentPage={setCurrentPagePopular}
-              />
-            </Route>
-            <Route path="/boy">
-              <StandardPage
-                pageTitle={"Boy"}
-                api_URL={boyURL}
-                currentPage={currentPageBoy}
-                showFavoriteCmp={false}
-                handleChangeCurrentPage={setCurrentPageBoy}
-              />
-            </Route>
-            <Route path="/search">
-              <StandardPage
-                pageTitle={"Search"}
-                api_URL={searchURL}
-                currentPage={currentPageSearch}
-                showFavoriteCmp={false}
-                handleChangeCurrentPage={setCurrentPageSearch}
-                query={query}
-              />
-            </Route>
-            {useLocalStorageAsDB ? (
-              <Route path="/favorite">
-                <FavoritePage pageTitle={"Favorite"} showFavoriteCmp={true} />
-              </Route>
-            ) : (
-              <Route path="/favorite">
-                <StandardPage
-                  pageTitle={"Favorites"}
-                  api_URL={favoriteURL}
-                  currentPage={currentPageFavorite}
-                  showFavoriteCmp={true}
-                  handleChangeCurrentPage={setCurrentPageFavorite}
-                />
-              </Route>
-            )}
-            <Route path="/search">
-              <StandardPage
-                pageTitle={"Search"}
-                api_URL={searchURL}
-                currentPage={currentPageSearch}
-                showFavoriteCmp={false}
-                handleChangeCurrentPage={setCurrentPageSearch}
-                query={query}
-              />
-            </Route>
-            <Redirect to="/billboard" />
-          </Switch>
-        </BrowserRouter>
-      </Container>
-    </MovieSysContext.Provider>
+                {/* {useLocalStorageAsDB ? (
+                    <Route path="/favorite">
+                      <FavoritePage
+                        pageTitle={"Favorite"}
+                        showFavoriteCmp={true}
+                      />
+                    </Route>
+                  ) : (
+                    <Route path="/favorite">
+                      <StandardPage
+                        pageTitle={"Favorites"}
+                        api_URL={favoriteURL}
+                        currentPage={currentPageFavorite}
+                        showFavoriteCmp={true}
+                        handleChangeCurrentPage={setCurrentPageFavorite}
+                      />
+                    </Route>
+                  )} */}
+                {/* <Route path="/search">
+                    <StandardPage
+                      pageTitle={"Search"}
+                      api_URL={searchURL}
+                      currentPage={currentPageSearch}
+                      showFavoriteCmp={false}
+                      handleChangeCurrentPage={setCurrentPageSearch}
+                      query={query}
+                    />
+                  </Route> */}
+                <Redirect to="/billboard" />
+              </Switch>
+            </Container>
+          </Col>
+          <Col xs={2}>
+            <Login />
+          </Col>
+        </Row>
+      </BrowserRouter>
+    </AuthContext.Provider>
   );
 };
 

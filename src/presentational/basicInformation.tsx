@@ -2,7 +2,6 @@ import * as React from "react";
 import { Movie } from "../components/movies";
 import { Card } from "react-bootstrap";
 import Favorite from "./favorite";
-import { useMovieSysContext } from "../components/movieSysContext";
 import Noimage from "../img/NoImage.jpg";
 import {
   basicCardStyle,
@@ -11,7 +10,7 @@ import {
   basicCardTitleStyle,
   basicCardBodyImgStyle
 } from "../components/stylesComponents";
-
+import { imagesURL } from "../service/apiData";
 import { usePageContext } from "../components/pageContext";
 import { Link, useRouteMatch } from "react-router-dom";
 
@@ -23,21 +22,17 @@ const BasicMovieInformation: React.SFC<BasicMovieInformationProps> = ({
   movie
 }) => {
   const { path } = useRouteMatch();
-
-  const { imagesURL } = useMovieSysContext();
-  const { showFavoriteCmp, handleFavoriteChange } = usePageContext();
+  const { showFavoriteCmp, handleMarkAsFavorite } = usePageContext();
 
   const optionalshowFavoriteCmp = () => {
     return showFavoriteCmp ? (
       <Favorite
         active={movie.isfavorite}
         setActive={() => {
-          if (handleFavoriteChange) handleFavoriteChange(movie);
+          if (handleMarkAsFavorite) handleMarkAsFavorite(movie);
         }}
       />
-    ) : (
-      ""
-    );
+    ) : null;
   };
   return (
     <React.Fragment>

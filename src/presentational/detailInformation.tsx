@@ -2,7 +2,6 @@ import React from "react";
 import { Movie } from "../components/movies";
 import { useLocation } from "react-router-dom";
 import { usePageContext } from "../components/pageContext";
-import { useMovieSysContext } from "../components/movieSysContext";
 import { Card, ListGroup, ListGroupItem, Row, Col } from "react-bootstrap";
 import Noimage from "../img/NoImage.jpg";
 import {
@@ -13,13 +12,12 @@ import {
   detailCardBodyTitleStyle
 } from "../components/stylesComponents";
 import Favorite from "./favorite";
-
+import { imagesURL } from "../service/apiData";
 interface DetailMovieInformationProps {}
 
 const DetailMovieInformation: React.SFC<DetailMovieInformationProps> = () => {
   let { state } = useLocation();
-  const { handleFavoriteChange } = usePageContext();
-  const { imagesURL } = useMovieSysContext();
+  const { handleMarkAsFavorite } = usePageContext();
 
   if (typeof state === "undefined") {
     return <h1>undefined movie</h1>;
@@ -64,7 +62,7 @@ const DetailMovieInformation: React.SFC<DetailMovieInformationProps> = () => {
               <Favorite
                 active={movie.isfavorite}
                 setActive={() => {
-                  if (handleFavoriteChange) handleFavoriteChange(movie);
+                  if (handleMarkAsFavorite) handleMarkAsFavorite(movie);
                 }}
               />
             </Col>
