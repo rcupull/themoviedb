@@ -1,5 +1,8 @@
 export const apiKey = "970c5054399c03d475194ce863d7da52";
+
 export const imagesURL = "https://image.tmdb.org/t/p/w185_and_h278_bestv2/";
+// export const imagesURL = "https://image.tmdb.org/t/p/w500/";
+
 export const apiURL = "https://api.themoviedb.org/3";
 export const apiAccessTokenV4 =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NzBjNTA1NDM5OWMwM2Q0NzUxOTRjZTg2M2Q3ZGE1MiIsInN1YiI6IjVlNjBlNWUyNTVjOTI2MDAxNzU4YThiYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.9YAVYgZGr0bOjPk_HHx6rJ5P-9Pa_JWAoDjqX5UmfAA";

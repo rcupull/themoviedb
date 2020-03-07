@@ -1,9 +1,12 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment } from "react";
 
-import { Form, Button } from "react-bootstrap";
-import { AuthParamsInterface, useAuthContext } from "../components/authContext";
+import { Form, Button, Container } from "react-bootstrap";
+import { useAuthContext } from "../components/authContext";
 import { createNewSession, deleteSession } from "../service/session";
-import { UserModeLabelStyle } from "../components/stylesComponents";
+import {
+  UserModeLabelStyle,
+  LoginContainerStyle
+} from "../components/stylesComponents";
 
 interface LoginProps {}
 const Login: React.SFC<LoginProps> = () => {
@@ -24,10 +27,10 @@ const Login: React.SFC<LoginProps> = () => {
     return <Form.Label style={UserModeLabelStyle}>{text}</Form.Label>;
   };
 
-  const UserMode = () => {
+  const StandardUser = () => {
     return (
-      <Fragment>
-        {LabelUserType("User mode")}
+      <Container style={LoginContainerStyle}>
+        {LabelUserType("Standard user")}
         <Form onSubmit={handleLogin}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Username</Form.Label>
@@ -50,24 +53,24 @@ const Login: React.SFC<LoginProps> = () => {
             Login
           </Button>
         </Form>
-      </Fragment>
+      </Container>
     );
   };
 
-  const AdminMode = () => {
+  const AdvancedUser = () => {
     return (
-      <Fragment>
-        {LabelUserType("Admin mode")}
+      <Container style={LoginContainerStyle}>
+        {LabelUserType("Advanced user")}
         <Form.Group controlId="formBasicPassword">
           <Button variant="primary" type="button" onClick={handleLogout}>
             Logout
           </Button>
         </Form.Group>
-      </Fragment>
+      </Container>
     );
   };
 
-  return params.session_id ? AdminMode() : UserMode();
+  return params.session_id ? AdvancedUser() : StandardUser();
 };
 
 export default Login;

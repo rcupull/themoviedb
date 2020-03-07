@@ -26,17 +26,19 @@ export function ToMovies(
   //Create movie objects
 
   if (typeof predicate === "object") {
-    return _.map(tmp, meta => {
+    return _.map(tmp, (meta, id) => {
       return {
         movieMetadata: meta,
-        isfavorite: existId(meta.id, predicate)
+        isfavorite: existId(meta.id, predicate),
+        ID: id
       };
     });
   } else {
-    return _.map(tmp, meta => {
+    return _.map(tmp, (meta, id) => {
       return {
         movieMetadata: meta,
-        isfavorite: predicate
+        isfavorite: predicate,
+        ID: id
       };
     });
   }

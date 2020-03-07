@@ -1,5 +1,4 @@
 import React from "react";
-import { Component } from "react";
 import { useAuthContext } from "./authContext";
 import { Route, Redirect } from "react-router-dom";
 
@@ -12,9 +11,9 @@ const SessionDependentRoute: React.SFC<SessionDependentRouteProps> = ({
   path,
   children
 }) => {
-  const { params } = useAuthContext();
+  const session_id = useAuthContext().params.session_id;
 
-  return params.session_id ? (
+  return session_id ? (
     <Route path={path}>{children}</Route>
   ) : (
     <Redirect to="/billboard" />

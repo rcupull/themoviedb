@@ -1,7 +1,6 @@
 import React from "react";
 import { Movie } from "../components/movies";
-import { useLocation } from "react-router-dom";
-import { usePageContext } from "../components/pageContext";
+import { useAuthContext } from "../components/authContext";
 import { Card, ListGroup, ListGroupItem, Row, Col } from "react-bootstrap";
 import Noimage from "../img/NoImage.jpg";
 import {
@@ -13,21 +12,18 @@ import {
 } from "../components/stylesComponents";
 import Favorite from "./favorite";
 import { imagesURL } from "../service/apiData";
-interface DetailMovieInformationProps {}
+interface DetailMovieInformationProps {
+  movie: Movie;
+}
 
-const DetailMovieInformation: React.SFC<DetailMovieInformationProps> = () => {
-  let { state } = useLocation();
-  const { handleMarkAsFavorite } = usePageContext();
-
-  if (typeof state === "undefined") {
-    return <h1>undefined movie</h1>;
-  }
-  const movie: Movie = state.movie;
-
+const DetailMovieInformation: React.SFC<DetailMovieInformationProps> = ({
+  movie
+}) => {
+  const session_id = useAuthContext().params.session_id;
   const topics = (title: string, text: any) => {
     return (
       <Row>
-        <Col xs={3} style={detailCardColStyle1}>
+        <Col sm={3} style={detailCardColStyle1}>
           <Card.Title>{title}</Card.Title>
         </Col>
         <Col>
@@ -37,10 +33,17 @@ const DetailMovieInformation: React.SFC<DetailMovieInformationProps> = () => {
     );
   };
 
+  const showFavoriteOrNot = () => {
+    return session_id ? (
+      <Col style={detailCardColStyle1}>
+        <Favorite movie={movie} />
+      </Col>
+    ) : null;
+  };
   return (
     <Card style={detailCardStyle}>
       <Row>
-        <Col xs={3}>
+        <Col sm={3}>
           <Card.Img
             style={detailCardImgStyle}
             variant="top"
@@ -51,21 +54,14 @@ const DetailMovieInformation: React.SFC<DetailMovieInformationProps> = () => {
             }
           />
         </Col>
-        <Col>
+        <Col sm={8}>
           <Row>
-            <Col xs={8}>
+            <Col sm={8}>
               <Card.Title style={detailCardTitleStyle}>
                 {movie.movieMetadata.title}
               </Card.Title>
             </Col>
-            <Col style={detailCardColStyle1}>
-              <Favorite
-                active={movie.isfavorite}
-                setActive={() => {
-                  if (handleMarkAsFavorite) handleMarkAsFavorite(movie);
-                }}
-              />
-            </Col>
+            <Col sm={3}>{showFavoriteOrNot()}</Col>
           </Row>
           <Card.Body style={detailCardBodyTitleStyle}></Card.Body>
 

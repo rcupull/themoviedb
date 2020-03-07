@@ -15,28 +15,22 @@ const ListMovies: React.SFC<ListMoviesProps> = ({ movies }) => {
   let rowItems = _.range(1, numRow + 1);
   let colItems = _.range(1, numCol + 1);
 
-  const listingMovies = () => {
-    let basicMovieInformationShowed = 0;
-    return rowItems.map(row => (
-      <Row key={row}>
-        {colItems.map(col => (
-          <Col key={col}>
-            {basicMovieInformationShowed < movies.length ? (
-              <BasicMovieInformation
-                movie={movies[basicMovieInformationShowed++]}
-              />
-            ) : (
-              ""
-            )}
-          </Col>
-        ))}
-      </Row>
-    ));
-  };
-
+  let basicMovieInformationShowed = 0;
   return (
     <Fragment>
-      {movies.length === 0 ? <h4>No movies</h4> : listingMovies()}
+      {rowItems.map(row => (
+        <Row key={row}>
+          {colItems.map(col => (
+            <Col sm key={col}>
+              {basicMovieInformationShowed < movies.length ? (
+                <BasicMovieInformation
+                  movie={movies[basicMovieInformationShowed++]}
+                />
+              ) : null}
+            </Col>
+          ))}
+        </Row>
+      ))}
     </Fragment>
   );
 };

@@ -1,4 +1,10 @@
 import CSS from "csstype";
+
+///////////////////////////App//////////////////////////////////////////
+export const mainContainerStyle: CSS.Properties = {
+  margin: "5% 0 0 0"
+};
+
 /////////////////////////////Basic Card////////////////////////////////////
 export const basicCardStyle: CSS.Properties = {
   width: "100%",
@@ -73,7 +79,20 @@ export const favoriteStylDisable: CSS.Properties = {
   padding: "5px 0 0 50px"
 };
 /////////////////////////////Login Component////////////////////////////////////
+export const LoginContainerStyle: CSS.Properties = {
+  padding: "5%",
+  margin: "5% 0 0 0",
+  border: "solid 1px rgb(220,220,220)"
+};
 export const UserModeLabelStyle: CSS.Properties = {
   fontSize: "2rem",
   textAlign: "center"
+};
+///////////////////////////No Movies Component//////////////////////////////////////////
+export const noResultsContainerStyle: CSS.Properties = {
+  textAlign: "center"
+};
+export const noResultsFormLabelStyle: CSS.Properties = {
+  paddingTop: "30%",
+  fontSize: "2rem"
 };

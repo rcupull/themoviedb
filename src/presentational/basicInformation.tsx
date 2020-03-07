@@ -21,18 +21,11 @@ interface BasicMovieInformationProps {
 const BasicMovieInformation: React.SFC<BasicMovieInformationProps> = ({
   movie
 }) => {
-  const { path } = useRouteMatch();
-  const { showFavoriteCmp, handleMarkAsFavorite } = usePageContext();
+  const path = useRouteMatch().path;
+  const { showFavoriteCmpBasicInf } = usePageContext();
 
   const optionalshowFavoriteCmp = () => {
-    return showFavoriteCmp ? (
-      <Favorite
-        active={movie.isfavorite}
-        setActive={() => {
-          if (handleMarkAsFavorite) handleMarkAsFavorite(movie);
-        }}
-      />
-    ) : null;
+    return showFavoriteCmpBasicInf ? <Favorite movie={movie} /> : null;
   };
   return (
     <React.Fragment>
@@ -78,13 +71,7 @@ const LinkWraperFavoriteBasicInformation: React.SFC<LinkWrap> = ({
   children
 }) => {
   return (
-    <Link
-      style={{ all: "unset" }}
-      to={{
-        pathname: path + "/" + movie.movieMetadata.id,
-        state: { movie: movie }
-      }}
-    >
+    <Link style={{ all: "unset" }} to={path + "/" + movie.movieMetadata.id}>
       {children}
     </Link>
   );

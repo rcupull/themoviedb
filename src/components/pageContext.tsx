@@ -3,12 +3,12 @@ import { Movie } from "./movies";
 
 interface PageContextProps {
   handleMarkAsFavorite: (movie: Movie) => void;
-  showFavoriteCmp: boolean;
+  showFavoriteCmpBasicInf: boolean;
 }
 
 export const PageContext = createContext<Partial<PageContextProps>>({
   handleMarkAsFavorite: (movie: Movie) => {},
-  showFavoriteCmp: false
+  showFavoriteCmpBasicInf: false
 });
 
 export function usePageContext() {

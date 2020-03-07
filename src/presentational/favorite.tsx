@@ -4,19 +4,24 @@ import {
   favoriteStylEnable,
   favoriteStylDisable
 } from "../components/stylesComponents";
+import { Movie } from "../components/movies";
+import { usePageContext } from "../components/pageContext";
 export interface FavoriteProps {
-  active: boolean;
-  setActive: () => void;
+  movie: Movie;
 }
 
-const Favorite: React.SFC<FavoriteProps> = ({ active, setActive }) => {
-  let classFavorite = active ? "fa fa-star" : "fa fa-star-o";
-  let favoriteStyle = active ? favoriteStylEnable : favoriteStylDisable;
+const Favorite: React.SFC<FavoriteProps> = ({ movie }) => {
+  const { handleMarkAsFavorite } = usePageContext();
+
+  let classFavorite = movie.isfavorite ? "fa fa-star" : "fa fa-star-o";
+  let favoriteStyle = movie.isfavorite
+    ? favoriteStylEnable
+    : favoriteStylDisable;
   return (
     <i
       style={favoriteStyle}
       onClick={() => {
-        setActive();
+        if (handleMarkAsFavorite) handleMarkAsFavorite(movie);
       }}
       className={classFavorite}
       aria-hidden="true"

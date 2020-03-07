@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "../presentational/navbar";
 import { AuthContext, AuthParamsInterface } from "../components/authContext";
 import Login from "../presentational/login";
+import NoResultsPage from "../presentational/noResultsPage";
 import SessionDependentRoute from "./sessionDependentRoute";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import {
@@ -11,10 +12,10 @@ import {
   SearchMovieParams,
   GetFavoriteMovieParams
 } from "../service/apiData";
-import StandardPage from "../presentational/standardPage";
-
+import StandardPage from "../presentational/page";
+import { nameSessionData } from "../service/session";
 import { Container, Row, Col } from "react-bootstrap";
-
+import { mainContainerStyle } from "../components/stylesComponents";
 export enum MovieTypes {
   billboard,
   popular,
@@ -42,11 +43,8 @@ export interface MovieMetadata {
 export interface Movie {
   movieMetadata: MovieMetadata;
   isfavorite: boolean;
+  ID: number;
 }
-
-const favoriteIndexURL = "http://localhost:8888/favorite-index";
-
-const useLocalStorageAsDB = true; //For use LocalStorage as DB
 
 export interface MoviesProps {}
 
@@ -77,53 +75,46 @@ const Movies: React.SFC<MoviesProps> = () => {
 
   const [query, setQuery] = useState<string>("");
 
-  /////////////////////Working with localStorage as DB//////////////////
-
-  const handleSetSession = (params: AuthParamsInterface) => {
-    setAuthParams(params);
-  };
-
-  // useEffect(() => {
-  //   if (useLocalStorageAsDB) loadDefaultDBInLocalStorage();
-  // }, []);
-
+  ///////////////////////////////Load LocalStorage//////////////////////////////////////////////
   useEffect(() => {
-    console.log("authParams", authParams);
-  }, [authParams]);
+    let data = localStorage.getItem(nameSessionData);
+    if (data) setAuthParams(JSON.parse(data));
+  }, []);
 
-  // let a = AuthSession(
-  //   { params: authParams, setParams: setAuthParams },
-  //   "rcupull",
-  //   "123"
-  // );
-
-  // console.log("a", a);
-
-  //////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////
 
   useEffect(() => {
     setCurrentPageSearch(1);
   }, [query]);
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+  const handleSetSession = (params: AuthParamsInterface) => {
+    params.session_id
+      ? localStorage.setItem(nameSessionData, JSON.stringify(params))
+      : localStorage.removeItem(nameSessionData);
+
+    setAuthParams(params);
+  };
+  ///////////////////////////////////////////////////////////////////////////////////////////////
   return (
     <AuthContext.Provider
       value={{ params: authParams, setParams: handleSetSession }}
     >
       <BrowserRouter>
-        <NavBar handleSearchMovies={setQuery} />
+        <NavBar handleSearch={setQuery} />
         <Row>
-          <Col xs={2}>
-            <Container></Container>
+          <Col sm={3}>
+            <Login />
           </Col>
-          <Col>
-            <Container>
+          <Col sm={8}>
+            <Container style={mainContainerStyle}>
               <Switch>
                 <Route path="/billboard">
                   <StandardPage
                     requestParams={BillboardMovieParams}
                     pageTitle={"Billboard"}
                     currentPage={currentPageBillboard}
-                    showFavoriteCmp={false}
+                    showFavoriteCmpBasicInf={false}
                     handleChangeCurrentPage={setCurrentPageBillboard}
                   />
                 </Route>
@@ -132,7 +123,7 @@ const Movies: React.SFC<MoviesProps> = () => {
                     requestParams={PopularMovieParams}
                     pageTitle={"Popular"}
                     currentPage={currentPagePopular}
-                    showFavoriteCmp={false}
+                    showFavoriteCmpBasicInf={false}
                     handleChangeCurrentPage={setCurrentPagePopular}
                   />
                 </Route>
@@ -141,7 +132,7 @@ const Movies: React.SFC<MoviesProps> = () => {
                     requestParams={BoyMovieParams}
                     pageTitle={"Boy"}
                     currentPage={currentPageBoy}
-                    showFavoriteCmp={false}
+                    showFavoriteCmpBasicInf={false}
                     handleChangeCurrentPage={setCurrentPageBoy}
                   />
                 </Route>
@@ -150,7 +141,7 @@ const Movies: React.SFC<MoviesProps> = () => {
                     requestParams={SearchMovieParams}
                     pageTitle={"Search"}
                     currentPage={currentPageSearch}
-                    showFavoriteCmp={false}
+                    showFavoriteCmpBasicInf={false}
                     handleChangeCurrentPage={setCurrentPageSearch}
                     query={query}
                   />
@@ -160,46 +151,17 @@ const Movies: React.SFC<MoviesProps> = () => {
                     requestParams={GetFavoriteMovieParams}
                     pageTitle={"Favorite"}
                     currentPage={currentPageFavorite}
-                    showFavoriteCmp={true}
+                    showFavoriteCmpBasicInf={true}
                     handleChangeCurrentPage={setCurrentPageFavorite}
                   />
                 </SessionDependentRoute>
 
-                {/* {useLocalStorageAsDB ? (
-                    <Route path="/favorite">
-                      <FavoritePage
-                        pageTitle={"Favorite"}
-                        showFavoriteCmp={true}
-                      />
-                    </Route>
-                  ) : (
-                    <Route path="/favorite">
-                      <StandardPage
-                        pageTitle={"Favorites"}
-                        api_URL={favoriteURL}
-                        currentPage={currentPageFavorite}
-                        showFavoriteCmp={true}
-                        handleChangeCurrentPage={setCurrentPageFavorite}
-                      />
-                    </Route>
-                  )} */}
-                {/* <Route path="/search">
-                    <StandardPage
-                      pageTitle={"Search"}
-                      api_URL={searchURL}
-                      currentPage={currentPageSearch}
-                      showFavoriteCmp={false}
-                      handleChangeCurrentPage={setCurrentPageSearch}
-                      query={query}
-                    />
-                  </Route> */}
+                <Route path="/nomovies" component={NoResultsPage} />
                 <Redirect to="/billboard" />
               </Switch>
             </Container>
           </Col>
-          <Col xs={2}>
-            <Login />
-          </Col>
+          <Col></Col>
         </Row>
       </BrowserRouter>
     </AuthContext.Provider>
