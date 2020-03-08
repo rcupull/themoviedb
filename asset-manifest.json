@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.js": "/themoviedb/static/js/main.0ed1f1a3.chunk.js",
-    "main.js.map": "/themoviedb/static/js/main.0ed1f1a3.chunk.js.map",
+    "main.js": "/themoviedb/static/js/main.923565d4.chunk.js",
+    "main.js.map": "/themoviedb/static/js/main.923565d4.chunk.js.map",
     "runtime-main.js": "/themoviedb/static/js/runtime-main.53c788e9.js",
     "runtime-main.js.map": "/themoviedb/static/js/runtime-main.53c788e9.js.map",
     "static/css/2.6102cdf0.chunk.css": "/themoviedb/static/css/2.6102cdf0.chunk.css",
     "static/js/2.e458cf8e.chunk.js": "/themoviedb/static/js/2.e458cf8e.chunk.js",
     "static/js/2.e458cf8e.chunk.js.map": "/themoviedb/static/js/2.e458cf8e.chunk.js.map",
     "index.html": "/themoviedb/index.html",
-    "precache-manifest.4ea732bb565928eb14e5aff334b32916.js": "/themoviedb/precache-manifest.4ea732bb565928eb14e5aff334b32916.js",
+    "precache-manifest.9b513f6c5594e0b138000a000b2028b8.js": "/themoviedb/precache-manifest.9b513f6c5594e0b138000a000b2028b8.js",
     "service-worker.js": "/themoviedb/service-worker.js",
     "static/css/2.6102cdf0.chunk.css.map": "/themoviedb/static/css/2.6102cdf0.chunk.css.map",
     "static/js/2.e458cf8e.chunk.js.LICENSE.txt": "/themoviedb/static/js/2.e458cf8e.chunk.js.LICENSE.txt",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.53c788e9.js",
     "static/css/2.6102cdf0.chunk.css",
     "static/js/2.e458cf8e.chunk.js",
-    "static/js/main.0ed1f1a3.chunk.js"
+    "static/js/main.923565d4.chunk.js"
   ]
 }
