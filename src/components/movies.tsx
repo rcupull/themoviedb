@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import NavBar from "../presentational/navbar";
 import { AuthContext, AuthParamsInterface } from "../components/authContext";
+import NavBar from "../presentational/navbar";
 import Login from "../presentational/login";
 import NoResultsPage from "../presentational/noResultsPage";
 import SessionDependentRoute from "./sessionDependentRoute";
