@@ -35,11 +35,11 @@ const BasicMovieInformation: React.SFC<BasicMovieInformationProps> = ({
             <Card.Img
               style={basicCardImgStyle}
               variant="top"
-              src={
-                movie.movieMetadata.poster_path
-                  ? imagesURL + movie.movieMetadata.poster_path
-                  : Noimage
-              }
+              // src={
+              //   movie.movieMetadata.poster_path
+              //     ? imagesURL + movie.movieMetadata.poster_path
+              //     : Noimage
+              // }
             />
           </Card.Body>
         </LinkWraperFavoriteBasicInformation>
