@@ -8,21 +8,17 @@ import {
   Row,
   Col
 } from "react-bootstrap";
-import { useAuthContext } from "../components/authContext";
 import { Link, useHistory } from "react-router-dom";
 import {
   navBarLinkStyle,
   navBarBrandStyle
 } from "../components/stylesComponents";
 
-export interface NavBarProps {
-  handleSearch: (query: string) => void;
-}
+import { RootReducerState, Actions } from "../reducers/rootReducer";
+import { useDispatch, useSelector } from "react-redux";
 
-enum TypeTab {
-  standarUser,
-  adminUser
-}
+type TypeTab = "STANDAR_USER" | "ADMIN_USER";
+
 interface Tag {
   id: number;
   path: string;
@@ -30,25 +26,29 @@ interface Tag {
   type: TypeTab;
 }
 const NavBarField: Tag[] = [
-  { id: 0, path: "/billboard", text: "Billboard", type: TypeTab.standarUser },
-  { id: 1, path: "/popular", text: "Popular", type: TypeTab.standarUser },
-  { id: 2, path: "/boy", text: "Boy", type: TypeTab.standarUser },
-  { id: 3, path: "/favorite", text: "Favorite", type: TypeTab.adminUser }
+  { id: 0, path: "/billboard", text: "Billboard", type: "STANDAR_USER" },
+  { id: 1, path: "/popular", text: "Popular", type: "STANDAR_USER" },
+  { id: 2, path: "/boy", text: "Boy", type: "STANDAR_USER" },
+  { id: 3, path: "/favorite", text: "Favorite", type: "ADMIN_USER" }
 ];
-const NavBar: React.SFC<NavBarProps> = ({ handleSearch }) => {
+
+export interface NavBarProps {}
+const NavBar: React.SFC<NavBarProps> = () => {
   const [query, setQuery] = useState<string>("");
-  const { params } = useAuthContext();
+  const dispatch = useDispatch();
+  const session_id: string = useSelector(
+    (state: RootReducerState) => state.auth.session_id
+  );
   let history = useHistory();
 
   const handleChangeQuery = (event: any) => {
     setQuery(event.target.value);
   };
-
   const showTags = () => {
     return (
       <Nav className="mr-auto">
         {NavBarField.map((tag: Tag) =>
-          tag.type === TypeTab.adminUser && !params.session_id ? null : (
+          tag.type === "ADMIN_USER" && session_id === "" ? null : (
             <Link
               key={tag.id}
               style={navBarLinkStyle}
@@ -64,7 +64,8 @@ const NavBar: React.SFC<NavBarProps> = ({ handleSearch }) => {
   };
 
   const handleSearchIntro = (query: string) => {
-    handleSearch(query);
+    dispatch(Actions.SetQueryAction(query));
+    dispatch(Actions.SetCurrentPageAction("SEARCH", 1));
     history.push("/search");
   };
 

@@ -1,4 +1,4 @@
-import { AuthParamsInterface } from "../components/authContext";
+import { AuthState, initialAuthState } from "../reducers/authReducer";
 import {
   apiURL,
   apiPathNewToken,
@@ -10,14 +10,14 @@ import {
 import { axiosFetch } from "./apiUtils";
 export const nameSessionData = "movieSessionData";
 
-export const createNewSession = (
+export const CreateNewSession = (
   username: string,
   password: string,
-  handleSetAuthParams: (params: AuthParamsInterface) => void
+  handleSetAuthParams: (params: AuthState) => void
 ) => {
   const createSession = (
     response: any,
-    handleSetAuthParams: (params: AuthParamsInterface) => void
+    handleSetAuthParams: (params: AuthState) => void
   ) => {
     if (response.status === 200) {
       let URL = apiURL + apiPathNewSession;
@@ -31,12 +31,12 @@ export const createNewSession = (
       };
       const successCreateSession = (res: any) => {
         if (res.status === 200) {
-          let params: AuthParamsInterface = res.data.success
+          let params: AuthState = res.data.success
             ? {
                 session_id: res.data.session_id,
                 request_token: response.data.request_token
               }
-            : { session_id: "", request_token: "" };
+            : initialAuthState;
           handleSetAuthParams(params);
         }
       };
@@ -102,9 +102,9 @@ export const createNewSession = (
   getRequestToken(username, password, handleSetAuthParams);
 };
 
-export const deleteSession = (
+export const DeleteSession = (
   session_id: string,
-  handleSetAuthParams: (params: AuthParamsInterface) => void
+  handleSetAuthParams: (params: AuthState) => void
 ) => {
   let URL = apiURL + apiPathDeleteSession;
   let params = { api_key: apiKey };
@@ -118,7 +118,7 @@ export const deleteSession = (
 
   const successFunction = (res: any) => {
     if (res.status === 200) {
-      handleSetAuthParams({ session_id: "", request_token: "" });
+      handleSetAuthParams(initialAuthState);
     }
   };
 
@@ -132,4 +132,4 @@ export const deleteSession = (
   );
 };
 
-export const validateSession = () => {};
+export const ValidateSession = () => {};

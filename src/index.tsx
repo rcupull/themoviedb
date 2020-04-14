@@ -5,12 +5,20 @@ import "font-awesome/css/font-awesome.css";
 
 import Movies from "./components/movies";
 import * as serviceWorker from "./serviceWorker";
-import AllTodo from "./testingRedux/allTodo";
-import TodoApp from "./todo/todoApp";
+// import AllTodo from "./testingRedux/allTodo";
+import { RootReducer } from "./reducers/rootReducer";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
 
-// ReactDOM.render(<Movies />, document.getElementById("root"));
+const store = createStore(RootReducer);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <Movies />
+  </Provider>,
+  document.getElementById("root")
+);
 // ReactDOM.render(<AllTodo />, document.getElementById("root"));
-ReactDOM.render(<TodoApp />, document.getElementById("root"));
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA

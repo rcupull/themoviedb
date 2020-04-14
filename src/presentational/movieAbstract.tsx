@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Movie } from "../components/movies";
+import { Movie } from "../reducers/dataTypes";
 import { Card } from "react-bootstrap";
-import Favorite from "./favorite";
+import Favorite from "../containers/favoritesC";
 import Noimage from "../img/NoImage.jpg";
 import {
   basicCardStyle,
@@ -11,21 +11,27 @@ import {
   basicCardBodyImgStyle
 } from "../components/stylesComponents";
 import { imagesURL } from "../service/apiData";
-import { usePageContext } from "../components/pageContext";
 import { Link, useRouteMatch } from "react-router-dom";
 
-interface BasicMovieInformationProps {
+export interface MovieAbstractStateProps {}
+
+export interface MovieAbstractDispatchProps {}
+
+export interface MovieAbstractOwnProps {
   movie: Movie;
+  showFavoriteComponent: boolean;
 }
 
-const BasicMovieInformation: React.SFC<BasicMovieInformationProps> = ({
-  movie
+type MovieAbstractProps = MovieAbstractStateProps &
+  MovieAbstractDispatchProps &
+  MovieAbstractOwnProps;
+const MovieAbstract: React.SFC<MovieAbstractProps> = ({
+  movie,
+  showFavoriteComponent
 }) => {
   const path = useRouteMatch().path;
-  const { showFavoriteCmpBasicInf } = usePageContext();
-
   const optionalshowFavoriteCmp = () => {
-    return showFavoriteCmpBasicInf ? <Favorite movie={movie} /> : null;
+    return showFavoriteComponent ? <Favorite movie={movie} /> : null;
   };
   return (
     <React.Fragment>
@@ -35,11 +41,7 @@ const BasicMovieInformation: React.SFC<BasicMovieInformationProps> = ({
             <Card.Img
               style={basicCardImgStyle}
               variant="top"
-              // src={
-              //   movie.movieMetadata.poster_path
-              //     ? imagesURL + movie.movieMetadata.poster_path
-              //     : Noimage
-              // }
+              src={movie.poster_path ? imagesURL + movie.poster_path : Noimage}
             />
           </Card.Body>
         </LinkWraperFavoriteBasicInformation>
@@ -48,9 +50,7 @@ const BasicMovieInformation: React.SFC<BasicMovieInformationProps> = ({
 
         <LinkWraperFavoriteBasicInformation movie={movie} path={path}>
           <Card.Body style={basicCardBodyStyle}>
-            <Card.Text style={basicCardTitleStyle}>
-              {movie.movieMetadata.title}
-            </Card.Text>
+            <Card.Text style={basicCardTitleStyle}>{movie.title}</Card.Text>
           </Card.Body>
         </LinkWraperFavoriteBasicInformation>
       </Card>
@@ -58,7 +58,7 @@ const BasicMovieInformation: React.SFC<BasicMovieInformationProps> = ({
   );
 };
 
-export default BasicMovieInformation;
+export default MovieAbstract;
 
 interface LinkWrap {
   movie: Movie;
@@ -71,7 +71,7 @@ const LinkWraperFavoriteBasicInformation: React.SFC<LinkWrap> = ({
   children
 }) => {
   return (
-    <Link style={{ all: "unset" }} to={path + "/" + movie.movieMetadata.id}>
+    <Link style={{ all: "unset" }} to={path + "/" + movie.id}>
       {children}
     </Link>
   );

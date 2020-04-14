@@ -1,170 +1,129 @@
 import React, { useState, useEffect } from "react";
-import { AuthContext, AuthParamsInterface } from "../components/authContext";
 import NavBar from "../presentational/navbar";
 import Login from "../presentational/login";
 import NoResultsPage from "../presentational/noResultsPage";
-import SessionDependentRoute from "./sessionDependentRoute";
+import SessionDependentRoute from "./privateRoute";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import {
-  BillboardMovieParams,
-  PopularMovieParams,
-  BoyMovieParams,
-  SearchMovieParams,
-  GetFavoriteMovieParams
-} from "../service/apiData";
-import StandardPage from "../presentational/page";
-import { nameSessionData } from "../service/session";
+import { MovieParams } from "../service/apiData";
+import Page from "../presentational/page";
+import { GetAllFavoriteIndex } from "../service/apiUtils";
 import { Container, Row, Col } from "react-bootstrap";
 import { mainContainerStyle } from "../components/stylesComponents";
-export enum MovieTypes {
-  billboard,
-  popular,
-  boy,
-  favorites
-}
 
-export interface MovieMetadata {
-  popularity: number | null;
-  id: number;
-  video: boolean | null;
-  vote_count: number | null;
-  vote_average: number | null;
-  title: string | null;
-  release_date: string | null;
-  original_language: string | null;
-  original_title: string | null;
-  genre_ids: number[] | null;
-  backdrop_path: string | null;
-  adult: boolean | null;
-  overview: string | null;
-  poster_path: string | null;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { Actions, RootReducerState } from "../reducers/rootReducer";
 
-export interface Movie {
-  movieMetadata: MovieMetadata;
-  isfavorite: boolean;
-  ID: number;
-}
+export interface MoviesStateProps {}
+export interface MoviesDispatchProps {}
+export interface MoviesOwnProps {}
 
-export interface MoviesProps {}
-
-export interface MoviesState {
-  ///////////////////////////////////
-  currentPageBillboard: number;
-  currentPagePopular: number;
-  currentPageBoy: number;
-  currentPageFavorite: number;
-  showFavoriteCmpInBasicInformation: boolean;
-  query: string;
-  //////////////////////////////////
-}
-
-export interface MoviesProps {}
+type MoviesProps = MoviesStateProps & MoviesDispatchProps & MoviesOwnProps;
 
 const Movies: React.SFC<MoviesProps> = () => {
-  const [authParams, setAuthParams] = useState<AuthParamsInterface>({
-    session_id: "",
-    request_token: ""
-  });
-
-  const [currentPageBillboard, setCurrentPageBillboard] = useState<number>(1);
-  const [currentPagePopular, setCurrentPagePopular] = useState<number>(1);
-  const [currentPageBoy, setCurrentPageBoy] = useState<number>(1);
-  const [currentPageFavorite, setCurrentPageFavorite] = useState<number>(1);
-  const [currentPageSearch, setCurrentPageSearch] = useState<number>(1);
-
-  const [query, setQuery] = useState<string>("");
-
+  const dispatch = useDispatch();
+  const session_id = useSelector(
+    (state: RootReducerState) => state.auth.session_id
+  );
   ///////////////////////////////Load LocalStorage//////////////////////////////////////////////
   useEffect(() => {
-    let data = localStorage.getItem(nameSessionData);
-    if (data) setAuthParams(JSON.parse(data));
-  }, []);
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////
+    dispatch(Actions.CheckSessionCreatedAction());
+  }, [dispatch]);
 
   useEffect(() => {
-    setCurrentPageSearch(1);
-  }, [query]);
+    if (session_id === "") {
+      dispatch(Actions.SetFavoritesIndexArray([]));
+    } else {
+      GetAllFavoriteIndex(session_id, (indexArray: number[]) => {
+        dispatch(Actions.SetFavoritesIndexArray(indexArray));
+      });
+    }
+  }, [dispatch, session_id]);
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////
-  const handleSetSession = (params: AuthParamsInterface) => {
-    params.session_id
-      ? localStorage.setItem(nameSessionData, JSON.stringify(params))
-      : localStorage.removeItem(nameSessionData);
-
-    setAuthParams(params);
-  };
-  ///////////////////////////////////////////////////////////////////////////////////////////////
   return (
-    <AuthContext.Provider
-      value={{ params: authParams, setParams: handleSetSession }}
-    >
-      <BrowserRouter>
-        <NavBar handleSearch={setQuery} />
-        <Row>
-          <Col sm={3}>
-            <Login />
-          </Col>
-          <Col sm={8}>
-            <Container style={mainContainerStyle}>
-              <Switch>
-                <Route path="/billboard">
-                  <StandardPage
-                    requestParams={BillboardMovieParams}
-                    pageTitle={"Billboard"}
-                    currentPage={currentPageBillboard}
-                    showFavoriteCmpBasicInf={false}
-                    handleChangeCurrentPage={setCurrentPageBillboard}
-                  />
-                </Route>
-                <Route path="/popular">
-                  <StandardPage
-                    requestParams={PopularMovieParams}
-                    pageTitle={"Popular"}
-                    currentPage={currentPagePopular}
-                    showFavoriteCmpBasicInf={false}
-                    handleChangeCurrentPage={setCurrentPagePopular}
-                  />
-                </Route>
-                <Route path="/boy">
-                  <StandardPage
-                    requestParams={BoyMovieParams}
-                    pageTitle={"Boy"}
-                    currentPage={currentPageBoy}
-                    showFavoriteCmpBasicInf={false}
-                    handleChangeCurrentPage={setCurrentPageBoy}
-                  />
-                </Route>
-                <Route path="/search">
-                  <StandardPage
-                    requestParams={SearchMovieParams}
-                    pageTitle={"Search"}
-                    currentPage={currentPageSearch}
-                    showFavoriteCmpBasicInf={false}
-                    handleChangeCurrentPage={setCurrentPageSearch}
-                    query={query}
-                  />
-                </Route>
-                <SessionDependentRoute path="/favorite">
-                  <StandardPage
-                    requestParams={GetFavoriteMovieParams}
-                    pageTitle={"Favorite"}
-                    currentPage={currentPageFavorite}
-                    showFavoriteCmpBasicInf={true}
-                    handleChangeCurrentPage={setCurrentPageFavorite}
-                  />
-                </SessionDependentRoute>
+    <BrowserRouter>
+      <NavBar />
+      <Row>
+        <Col sm={3}>
+          <Login />
+        </Col>
+        <Col sm={8}>
+          <Container style={mainContainerStyle}>
+            <Switch>
+              <Route path="/billboard">
+                <Page
+                  requestParams={MovieParams.billboard}
+                  pageTitle={"Billboard"}
+                  currentPage={useSelector(
+                    (state: RootReducerState) => state.currentPage.billboard
+                  )}
+                  showFavoriteInAbstract={false}
+                  handleChangeCurrentPage={(page: number) => {
+                    dispatch(Actions.SetCurrentPageAction("BILLBOARD", page));
+                  }}
+                />
+              </Route>
+              <Route path="/popular">
+                <Page
+                  requestParams={MovieParams.popular}
+                  pageTitle={"Popular"}
+                  currentPage={useSelector(
+                    (state: RootReducerState) => state.currentPage.popular
+                  )}
+                  showFavoriteInAbstract={false}
+                  handleChangeCurrentPage={(page: number) => {
+                    dispatch(Actions.SetCurrentPageAction("POPULAR", page));
+                  }}
+                />
+              </Route>
+              <Route path="/boy">
+                <Page
+                  requestParams={MovieParams.boy}
+                  pageTitle={"Boy"}
+                  currentPage={useSelector(
+                    (state: RootReducerState) => state.currentPage.boy
+                  )}
+                  showFavoriteInAbstract={false}
+                  handleChangeCurrentPage={(page: number) => {
+                    dispatch(Actions.SetCurrentPageAction("BOY", page));
+                  }}
+                />
+              </Route>
+              <Route path="/search">
+                <Page
+                  requestParams={MovieParams.search}
+                  pageTitle={"Search"}
+                  currentPage={useSelector(
+                    (state: RootReducerState) => state.currentPage.search
+                  )}
+                  showFavoriteInAbstract={false}
+                  handleChangeCurrentPage={(page: number) => {
+                    dispatch(Actions.SetCurrentPageAction("SEARCH", page));
+                  }}
+                  query={useSelector((state: RootReducerState) => state.query)}
+                />
+              </Route>
+              <SessionDependentRoute path="/favorite">
+                <Page
+                  requestParams={MovieParams.favorites}
+                  pageTitle={"Favorites"}
+                  currentPage={useSelector(
+                    (state: RootReducerState) => state.currentPage.favorite
+                  )}
+                  showFavoriteInAbstract={true}
+                  handleChangeCurrentPage={(page: number) => {
+                    dispatch(Actions.SetCurrentPageAction("FAVORITE", page));
+                  }}
+                />
+              </SessionDependentRoute>
 
-                <Route path="/nomovies" component={NoResultsPage} />
-                <Redirect to="/billboard" />
-              </Switch>
-            </Container>
-          </Col>
-          <Col></Col>
-        </Row>
-      </BrowserRouter>
-    </AuthContext.Provider>
+              <Route path="/nomovies" component={NoResultsPage} />
+              <Redirect to="/billboard" />
+            </Switch>
+          </Container>
+        </Col>
+        <Col></Col>
+      </Row>
+    </BrowserRouter>
   );
 };
 

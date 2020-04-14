@@ -1,28 +1,36 @@
 import React, { useState, Fragment, useEffect } from "react";
 
 import { Form, Button, Container } from "react-bootstrap";
-import { useAuthContext } from "../components/authContext";
-import { createNewSession, deleteSession } from "../service/session";
+import { useDispatch, useSelector } from "react-redux";
+import { RootReducerState, Actions } from "../reducers/rootReducer";
+import { CreateNewSession, DeleteSession } from "../service/session";
 import {
   UserModeLabelStyle,
   LoginContainerStyle
 } from "../components/stylesComponents";
+import { AuthState } from "../reducers/authReducer";
 
 interface LoginProps {}
 const Login: React.SFC<LoginProps> = () => {
   const [username, setUserName] = useState<string>("");
   const [password, setPassWord] = useState<string>("");
-
-  const { setParams, params } = useAuthContext();
-
+  const dispatch = useDispatch();
+  const session_id = useSelector(
+    (state: RootReducerState) => state.auth.session_id
+  );
+  ////////////////////////////////////////
   const handleLogin = (event: any) => {
     event.preventDefault();
-    createNewSession(username, password, setParams);
+    CreateNewSession(username, password, (params: AuthState) => {
+      dispatch(Actions.LoginAction(params));
+    });
   };
   const handleLogout = () => {
-    deleteSession(params.session_id, setParams);
+    DeleteSession(session_id, () => {
+      dispatch(Actions.LogoutAction());
+    });
   };
-
+  //////////////////////////////////////////////
   const LabelUserType = (text: string) => {
     return <Form.Label style={UserModeLabelStyle}>{text}</Form.Label>;
   };
@@ -70,7 +78,7 @@ const Login: React.SFC<LoginProps> = () => {
     );
   };
 
-  return params.session_id ? AdvancedUser() : StandardUser();
+  return session_id ? AdvancedUser() : StandardUser();
 };
 
 export default Login;

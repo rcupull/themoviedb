@@ -55,7 +55,6 @@ const Pagination: React.SFC<PaginationProps> = ({
       <Pag>
         <Pag.First
           onClick={() => {
-            console.log("page", 1);
             if (handleChangeCurrentPage) handleChangeCurrentPage(1);
           }}
         />

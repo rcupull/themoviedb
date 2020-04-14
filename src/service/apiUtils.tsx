@@ -2,7 +2,7 @@ import axios from "axios";
 import {
   markAsFavoriteURL,
   apiKey,
-  GetFavoriteMovieParams,
+  MovieParams,
   RequestParamsInterface
 } from "./apiData";
 import _ from "lodash";
@@ -48,45 +48,24 @@ export interface MarkAsFavoriteInterface {
     errorFunction: (res: any) => void
   ): void;
 }
-export const GetStandarPage = (
+
+export const GetPage = (
   requestParams: RequestParamsInterface,
   page: number,
   successFunction: (res: any) => void,
   errorFunction: (res: any) => void,
-  session_id?: string
+  optionalParams?: { session_id?: string; query?: string }
 ) => {
   let params =
-    typeof session_id === "undefined"
+    typeof optionalParams === "undefined"
       ? {
           ...requestParams.params,
           ...{ page: page }
         }
       : {
           ...requestParams.params,
-          ...{ page: page, session_id: session_id }
+          ...{ page: page, ...optionalParams }
         };
-
-  axiosFetch(
-    requestParams.method,
-    requestParams.URL,
-    params,
-    requestParams.data,
-    { successFunction: successFunction, args: [] },
-    errorFunction
-  );
-};
-
-export const GetSearchPage = (
-  requestParams: RequestParamsInterface,
-  page: number,
-  query: string,
-  successFunction: (res: any) => void,
-  errorFunction: (res: any) => void
-) => {
-  let params = {
-    ...requestParams.params,
-    ...{ page: page, query: query }
-  };
 
   axiosFetch(
     requestParams.method,
@@ -119,7 +98,7 @@ export const GetAllFavoriteIndex = (
   setFavoriteIndexArray: (indexArray: number[]) => void
 ) => {
   let params = {
-    ...GetFavoriteMovieParams.params,
+    ...MovieParams.favorites.params,
     ...{ session_id: session_id, page: 1 }
   };
 
@@ -132,10 +111,10 @@ export const GetAllFavoriteIndex = (
   };
 
   axiosFetch(
-    GetFavoriteMovieParams.method,
-    GetFavoriteMovieParams.URL,
+    MovieParams.favorites.method,
+    MovieParams.favorites.URL,
     params,
-    GetFavoriteMovieParams.data,
+    MovieParams.favorites.data,
     { successFunction: successFunction, args: [] },
     errorFunction
   );

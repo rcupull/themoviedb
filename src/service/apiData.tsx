@@ -36,19 +36,19 @@ export interface RequestParamsInterface {
   params: object;
   data: object;
 }
-export const BillboardMovieParams: RequestParamsInterface = {
+const BillboardMovieParams: RequestParamsInterface = {
   method: "get",
   URL: `${apiURL}${apiPathTrending}/movie/week`,
   params: { api_key: apiKey },
   data: {}
 };
-export const PopularMovieParams: RequestParamsInterface = {
+const PopularMovieParams: RequestParamsInterface = {
   method: "get",
   URL: `${apiURL}${apiPathDiscover}/movie`,
   params: { api_key: apiKey, sort_by: "popularity.asc", include_video: false },
   data: {}
 };
-export const BoyMovieParams: RequestParamsInterface = {
+const BoyMovieParams: RequestParamsInterface = {
   method: "get",
   URL: `${apiURL}${apiPathDiscover}/movie`,
   params: {
@@ -60,7 +60,7 @@ export const BoyMovieParams: RequestParamsInterface = {
   data: {}
 };
 
-export const GetFavoriteMovieParams: RequestParamsInterface = {
+const FavoriteMovieParams: RequestParamsInterface = {
   method: "get",
   URL: `${apiURL}/account/{account_id}/favorite/movies`,
   params: {
@@ -71,9 +71,17 @@ export const GetFavoriteMovieParams: RequestParamsInterface = {
   data: {}
 };
 
-export const SearchMovieParams: RequestParamsInterface = {
+const SearchMovieParams: RequestParamsInterface = {
   method: "get",
   URL: `${apiURL}${apiPathSearch}/movie`,
   params: { api_key: apiKey },
   data: {}
+};
+
+export const MovieParams = {
+  billboard: BillboardMovieParams,
+  popular: PopularMovieParams,
+  boy: BoyMovieParams,
+  search: SearchMovieParams,
+  favorites: FavoriteMovieParams
 };
