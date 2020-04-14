@@ -25,11 +25,6 @@ import {
   MovieArrayState,
   Actions as MovieArrayActions
 } from "./movieArrayReducer";
-import {
-  FavoritesIndexState,
-  FavoritesIndexReducer,
-  Actions as FavoritesIndexActions
-} from "./favoritesIndexReducer";
 //////////////////////////////////////////////////////////
 
 export const Actions = {
@@ -39,7 +34,6 @@ export const Actions = {
   ...CurrentPageActions,
   ...MovieArrayActions,
   ...PagesAmountActions
-  // ...FavoritesIndexActions
 };
 
 ///////////////////////////////////////////////////////
@@ -50,7 +44,6 @@ export interface RootReducerState {
   query: QueryState;
   error: ErrorState;
   pagesAmount: PagesAmountState;
-  // favoritesIndex: FavoritesIndexState;
 }
 
 export const RootReducer = combineReducers<RootReducerState>({
@@ -60,5 +53,4 @@ export const RootReducer = combineReducers<RootReducerState>({
   query: QueryReducer,
   error: ErrorReducer,
   pagesAmount: PagesAmountReducer
-  // favoritesIndex: FavoritesIndexReducer
 });

@@ -20,7 +20,6 @@ type MovieProps = MovieDetailsStateProps &
 
 const MovieDetails: React.SFC<MovieProps> = ({ movie, session_id }) => {
   // const session_id = useAuthContext().params.session_id;
-  console.log("movie", movie);
   const topics = (title: string, text: any) => {
     return (
       <Row>

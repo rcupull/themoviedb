@@ -3,21 +3,21 @@ import MovieDetails, {
   MovieDetailsOwnProps,
   MovieDetailsDispatchProps
 } from "../presentational/movieDetails";
-import * as React_Redux from "react-redux";
+import { MapStateToProps, MapDispatchToProps, connect } from "react-redux";
 import { RootReducerState } from "../reducers/rootReducer";
 
-const MapStateToProps: React_Redux.MapStateToProps<
+const MapStateToPropsInside: MapStateToProps<
   MovieDetailsStateProps,
   MovieDetailsOwnProps,
   RootReducerState
 > = state => ({ session_id: state.auth.session_id });
 
-const MapDispatchToProps: React_Redux.MapDispatchToProps<
+const MapDispatchToPropsInside: MapDispatchToProps<
   MovieDetailsDispatchProps,
   MovieDetailsOwnProps
 > = dispatch => ({});
 
-export default React_Redux.connect(
-  MapStateToProps,
-  MapDispatchToProps
+export default connect(
+  MapStateToPropsInside,
+  MapDispatchToPropsInside
 )(MovieDetails);

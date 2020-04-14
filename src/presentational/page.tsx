@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, useCallback } from "react";
+import React, { useEffect, Fragment } from "react";
 
 import { Movie } from "../reducers/dataTypes";
 import ListMovies from "./listMovies";
@@ -8,13 +8,8 @@ import Pagination from "./pagination";
 import { Route, Switch, useRouteMatch, Redirect } from "react-router-dom";
 import MovieDetails from "../containers/movieDetailsC";
 import { RequestParamsInterface } from "../service/apiData";
-import {
-  MarkAsFavorite,
-  data_MarkAsFavoriteInterface,
-  GetPage
-} from "../service/apiUtils";
+import { GetPage } from "../service/apiUtils";
 
-import { GetAllFavoriteIndex } from "../service/apiUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { Actions, RootReducerState } from "../reducers/rootReducer";
 
@@ -58,47 +53,6 @@ const StandardPage: React.SFC<PageProps> = ({
   const session_id = useSelector(
     (state: RootReducerState) => state.auth.session_id
   );
-  ///////////////////////////////////////////////////////////////////////////////////////////////
-
-  // useEffect(() => {
-  //   if (session_id) {
-
-  //     const setFavoriteIndexArray = (indexArray: number[]) => {
-  //       handleSetFavoritesIndex(indexArray);
-  //     };
-
-  //     GetAllFavoriteIndex(session_id, setFavoriteIndexArray);
-  //   }
-  // }, [session_id, handleSetFavoritesIndex]);
-
-  ///////////////////////////////////////////////////////////////////////////////
-  // const memoizedGetStandarPage = useCallback(() => {
-  //   const successFunction = (res: any) => {
-  //     if (res.status === 200) {
-  //       dispatch(Actions.ClearErrorAction());
-  //       dispatch(Actions.SetPagesAmountAction(res.data.total_pages));
-  //       dispatch(Actions.SetMovieArray(res.data.result));
-  //       // handleSetMovieArray(
-  //       //   ToMovies(
-  //       //     res.data.results,
-  //       //     favoritesIndex.length > 0 ? favoritesIndex : false
-  //       //   )
-  //       // );
-  //     }
-  //   };
-  //   const errorFunction = (res: any) => {
-  //     console.log("error data request");
-  //     dispatch(Actions.SetErrorAction());
-  //   };
-
-  //   GetStandarPage(
-  //     requestParams,
-  //     currentPage,
-  //     successFunction,
-  //     errorFunction,
-  //     session_id
-  //   );
-  // }, [requestParams, currentPage, dispatch, session_id]);
 
   useEffect(() => {
     const successFunction = (res: any) => {

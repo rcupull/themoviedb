@@ -1,4 +1,4 @@
-import * as React_Redux from "react-redux";
+import { MapStateToProps, MapDispatchToProps, connect } from "react-redux";
 import { Movie } from "../reducers/dataTypes";
 import Favorite, {
   FavoriteStateProps,
@@ -8,7 +8,7 @@ import Favorite, {
 import { RootReducerState } from "../reducers/rootReducer";
 import { IsFavoriteMovie } from "../reducers/movieUtils";
 
-const MapStateToProps: React_Redux.MapStateToProps<
+const MapStateToPropsInside: MapStateToProps<
   FavoriteStateProps,
   FavoriteOwnProps,
   RootReducerState
@@ -18,7 +18,7 @@ const MapStateToProps: React_Redux.MapStateToProps<
   };
 };
 
-const MapDispatchToProps: React_Redux.MapDispatchToProps<
+const MapDispatchToPropsInside: MapDispatchToProps<
   FavoriteDispatchProps,
   FavoriteOwnProps
 > = dispatch => {
@@ -27,7 +27,7 @@ const MapDispatchToProps: React_Redux.MapDispatchToProps<
   };
 };
 
-export default React_Redux.connect(
-  MapStateToProps,
-  MapDispatchToProps
+export default connect(
+  MapStateToPropsInside,
+  MapDispatchToPropsInside
 )(Favorite);

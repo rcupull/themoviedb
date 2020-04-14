@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import NavBar from "../presentational/navbar";
 import Login from "../presentational/login";
 import NoResultsPage from "../presentational/noResultsPage";
