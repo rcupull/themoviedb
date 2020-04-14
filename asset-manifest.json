@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.js": "/themoviedb/static/js/main.923565d4.chunk.js",
-    "main.js.map": "/themoviedb/static/js/main.923565d4.chunk.js.map",
+    "main.js": "/themoviedb/static/js/main.cd7c076a.chunk.js",
+    "main.js.map": "/themoviedb/static/js/main.cd7c076a.chunk.js.map",
     "runtime-main.js": "/themoviedb/static/js/runtime-main.53c788e9.js",
     "runtime-main.js.map": "/themoviedb/static/js/runtime-main.53c788e9.js.map",
     "static/css/2.6102cdf0.chunk.css": "/themoviedb/static/css/2.6102cdf0.chunk.css",
-    "static/js/2.e458cf8e.chunk.js": "/themoviedb/static/js/2.e458cf8e.chunk.js",
-    "static/js/2.e458cf8e.chunk.js.map": "/themoviedb/static/js/2.e458cf8e.chunk.js.map",
+    "static/js/2.e84d1cb2.chunk.js": "/themoviedb/static/js/2.e84d1cb2.chunk.js",
+    "static/js/2.e84d1cb2.chunk.js.map": "/themoviedb/static/js/2.e84d1cb2.chunk.js.map",
     "index.html": "/themoviedb/index.html",
-    "precache-manifest.9b513f6c5594e0b138000a000b2028b8.js": "/themoviedb/precache-manifest.9b513f6c5594e0b138000a000b2028b8.js",
+    "precache-manifest.088e45e03354f1a8ac0622d9bc18d7cf.js": "/themoviedb/precache-manifest.088e45e03354f1a8ac0622d9bc18d7cf.js",
     "service-worker.js": "/themoviedb/service-worker.js",
     "static/css/2.6102cdf0.chunk.css.map": "/themoviedb/static/css/2.6102cdf0.chunk.css.map",
-    "static/js/2.e458cf8e.chunk.js.LICENSE.txt": "/themoviedb/static/js/2.e458cf8e.chunk.js.LICENSE.txt",
+    "static/js/2.e84d1cb2.chunk.js.LICENSE.txt": "/themoviedb/static/js/2.e84d1cb2.chunk.js.LICENSE.txt",
     "static/media/font-awesome.css": "/themoviedb/static/media/fontawesome-webfont.fee66e71.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.53c788e9.js",
     "static/css/2.6102cdf0.chunk.css",
-    "static/js/2.e458cf8e.chunk.js",
-    "static/js/main.923565d4.chunk.js"
+    "static/js/2.e84d1cb2.chunk.js",
+    "static/js/main.cd7c076a.chunk.js"
   ]
 }
