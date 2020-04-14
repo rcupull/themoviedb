@@ -104,7 +104,7 @@ export const CreateNewSession = (
 
 export const DeleteSession = (
   session_id: string,
-  handleSetAuthParams: (params: AuthState) => void
+  handleClearAuthParams: () => void
 ) => {
   let URL = apiURL + apiPathDeleteSession;
   let params = { api_key: apiKey };
@@ -118,7 +118,7 @@ export const DeleteSession = (
 
   const successFunction = (res: any) => {
     if (res.status === 200) {
-      handleSetAuthParams(initialAuthState);
+      handleClearAuthParams();
     }
   };
 
